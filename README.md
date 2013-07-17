@@ -1,4 +1,4 @@
 core
 ====
 
-core lib for python
+core lib for zhaohaowan python env
