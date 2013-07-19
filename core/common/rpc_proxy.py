@@ -1,0 +1,17 @@
+class RPCProxy(object):
+    __slots__ = '_q'
+    def __init__(self, conn_class, max_conn_num, **kwargs):
+        self._q = BlockConnQueue(conn_class, max_conn_num, **kwargs)
+
+    def __getattr__(self, key):
+        def _(*args, **kwargs):
+            try:
+                conn = self._q.get()
+                func = getattr(conn, key)
+                return func(*args, **kwargs)
+            finally:
+                self._q.put(conn)
+        return _
+
+class TracedRPCProxy(RPCProxy):
+    pass
