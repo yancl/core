@@ -13,6 +13,8 @@ class MC(cmemcached.Client):
 def get_mc_client(hosts, max_conn_num=30):
     sorted_hosts = hosts
     key = get_md5(sorted_hosts)
+
+    global mc_clients
     if key not in mc_clients:
         params = {'servers': hosts, 'comp_threshold':256, 'comp_method':'quicklz'}
         proxy = RPCProxy(cls=MC, max_conn_num=max_conn_num, **params)

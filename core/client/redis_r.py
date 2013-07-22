@@ -39,6 +39,8 @@ def get_redis_client(filename, max_conn_num=30):
     with open(filename, 'r') as f:
         content = f.readlines()
     key = get_md5(content)
+
+    global rs_clients
     if key not in rs_clients:
         params = {'ketama_server_file':filename}
         proxy = RPCProxy(cls=RedisRing, max_conn_num=max_conn_num, **params)

@@ -7,6 +7,8 @@ mysql_clients = {}
 def get_mysql_client(host, port, user, passwd, database, max_conn_num=30, **kwargs):
     s = str(host) + str(port) + str(user) + str(passwd) + str(database) + str(kwargs)
     key = get_md5(s)
+
+    global mysql_clients
     if key not in mysql_clients:
         params = {'host': host, 'port': port, 'user':user, 'password':passwd, 'database':database}
         params.update(kwargs)
