@@ -8,7 +8,7 @@ if sys.argv[-1] == 'publish':
     sys.exit()
 
 setup(
-        name = "corelib",
+        name = "core",
         version = "0.10",
         description="python corelib for zhaohaowan project",
         long_description=open("README.md").read(),
