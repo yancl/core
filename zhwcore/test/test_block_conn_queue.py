@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 from nose.tools import *
 from Queue import Empty
 
