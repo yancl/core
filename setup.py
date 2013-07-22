@@ -23,9 +23,15 @@ setup(
         zip_safe=False,
         install_requires=[
             'distribute',
+            'MySQL-python',
+            'torndb',
+            'Pyrex',
+            'python-libmemcached',
+            'redis',
+            'thrift_client',
         ],
         tests_require=[
             'nose',
         ],
-        packages=['common']
+        packages=['core', 'core.common', 'core.client', 'core.patch', 'core.test', 'core.utils']
 )
