@@ -22,7 +22,7 @@ class RedisRing(object):
                 server_string : connection,
             })
 
-    def get_con(self, key):
+    def get_conn(self, key):
         server = self.continuum.get_server(key)
         return RedisRing.SERVERS.get(server[1])
 
@@ -35,7 +35,7 @@ class RedisRing(object):
 def get_redis_client(filename, max_conn_num=30):
     content = ''
     with open(filename, 'r') as f:
-        content = f.readlines()
+        content = f.read()
     key = get_md5(content)
 
     global rs_clients

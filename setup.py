@@ -28,6 +28,7 @@ setup(
             'Pyrex',
             'python-libmemcached',
             'redis',
+            'ketama',
             'thrift_client',
         ],
         tests_require=[
