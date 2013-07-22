@@ -1,7 +1,9 @@
+from __future__ import absolute_import
+
 import cmemcached
 
-from common.rpc_proxy import RPCProxy
-from utils.md5 import get_md5
+from zhwcore.common.rpc_proxy import RPCProxy
+from zhwcore.utils.md5 import get_md5
 
 mc_clients = {}
 

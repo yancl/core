@@ -12,11 +12,11 @@ class BlockConnQueue(object):
             raise Exception('max conn num setting is too big(>%d),value:%d' % (MAX_CONN_NUM, self._max_conn_num))
         self._init_q()
 
-    def get(self):
-        return self._q.get(block=True)
+    def get(self, block=True, timeout=None):
+        return self._q.get(block=block, timeout=timeout)
 
     def put(self, conn):
-        self._q.put(conn, block=False)
+        self._q.put(conn, block=True)
 
     def _init_q(self):
         for i in xrange(self._max_conn_num):

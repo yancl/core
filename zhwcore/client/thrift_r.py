@@ -1,5 +1,7 @@
+from __future__ import absolute_import
+
 from thrift_client import ThriftClient
-from common.rpc_proxy import TracedRPCProxy
+from zhwcore.common.rpc_proxy import TracedRPCProxy
 
 thrift_clients = {}
 
