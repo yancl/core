@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 from Queue import Queue
 MAX_CONN_NUM = 200
 

@@ -1,7 +1,11 @@
+from __future__ import absolute_import
+
+from .block_conn_queue import BlockConnQueue
+
 class RPCProxy(object):
     __slots__ = '_q'
-    def __init__(self, conn_class, max_conn_num, **kwargs):
-        self._q = BlockConnQueue(conn_class, max_conn_num, **kwargs)
+    def __init__(self, cls, max_conn_num, **kwargs):
+        self._q = BlockConnQueue(cls, max_conn_num, **kwargs)
 
     def __getattr__(self, key):
         def _(*args, **kwargs):
