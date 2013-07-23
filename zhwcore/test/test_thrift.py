@@ -4,7 +4,7 @@ from zhwcore.client.thrift_r import get_thrift_client
 
 class TestCaseThriftClient(object):
     def __init__(self):
-        self._hosts = [('127.0.0.1', 9523)]
+        self._hosts = ['127.0.0.1:9523']
         self._protocol_path = '/home/yancl/env/web/kantuban'
 
     def setup(self):
@@ -25,7 +25,7 @@ class TestCaseThriftClient(object):
 
         import random
         hosts = self._hosts
-        hosts.append(('127.0.0.1', 9524))
+        hosts.append('127.0.0.1:9524')
         random.shuffle(hosts)
         c3 = get_thrift_client(TServices.Client, hosts)
         assert len(thrift_r.thrift_clients) == 2

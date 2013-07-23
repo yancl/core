@@ -15,11 +15,12 @@ def get_thrift_client(cls, hosts, excpt_classes=(), max_conn_num=30, retries=2, 
     hosts_t.sort()
     key = str(cls) + str(hosts_t) + str(excpt_classes)
 
+    hosts = [item.split(':') for item in hosts]
     global thrift_clients
     if key not in thrift_clients:
         params = {
             'client_class':cls,
-            'servers':['%s:%d' % (item[0], item[1]) for item in hosts],
+            'servers':['%s:%d' % (item[0], int(item[1])) for item in hosts],
             'options':{
                 'protocol' : TBinaryProtocol.TBinaryProtocolAccelerated,
                 #'protocol' : TBinaryProtocol.TBinaryProtocol,
