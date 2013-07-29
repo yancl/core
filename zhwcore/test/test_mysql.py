@@ -56,3 +56,18 @@ class TestCaseMysqlClient(object):
         assert rowcount == 1
 
         assert c.execute_rowcount('delete from t where id=%s', seq_id) == 1
+
+    def test_insert_dict(self):
+        kwargs = {}
+        c = get_mysql_client(self._host, self._port, self._user, self._passwd, self._db, max_conn_num=30, **kwargs)
+        seq_id = c.insert_dict(table='t', **{'name':'yancl'})
+        row = c.get('select * from t where id=%s', seq_id)
+        assert row.name == 'yancl'
+        assert c.execute_rowcount('delete from t where id=%s', seq_id) == 1
+
+    def test_update_dict(self):
+        CLIENT_FOUND_ROWS = 2
+        kwargs = {'client_flag':CLIENT_FOUND_ROWS, 'charset':'utf8mb4'}
+        c = get_mysql_client(self._host, self._port, self._user, self._passwd, self._db, max_conn_num=30, **kwargs)
+        rowcount = c.update_dict(table='t', pk_name='id', pk=1, **{'name':'aaa'})
+        assert rowcount == 0
