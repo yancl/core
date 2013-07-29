@@ -7,6 +7,10 @@ from zhwcore.utils.md5 import get_md5
 mysql_clients = {}
 
 class TorndbWrapper(torndb.Connection):
+    """
+        supply some api for convinient db update or fetch
+        these apis are sql-inject safe
+    """
     def __init__(self, *args, **kwargs):
         super(TorndbWrapper, self).__init__(*args, **kwargs)
 
