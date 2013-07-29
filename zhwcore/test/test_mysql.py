@@ -63,6 +63,8 @@ class TestCaseMysqlClient(object):
         seq_id = c.insert_dict(table='t', **{'name':'yancl'})
         row = c.get('select * from t where id=%s', seq_id)
         assert row.name == 'yancl'
+        row_x = c.get_row(table='t', what='name', pk=seq_id, pk_name='id')
+        assert row_x.name == 'yancl'
         assert c.execute_rowcount('delete from t where id=%s', seq_id) == 1
 
     def test_update_dict(self):

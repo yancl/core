@@ -19,13 +19,17 @@ class TorndbWrapper(torndb.Connection):
 
     def update_dict(self, table, pk, pk_name='id', **kwargs):
         place_holder = ','.join('{0}=%({0})s'.format(k) for k in kwargs.keys())
-        static_param = {'table':table, 'pk_name':pk_name}
-        sql = 'update %(table)s set {0} where %(pk_name)s={1}' % static_param
-        sql = sql.format(place_holder, '%(pk_val)s')
+        static_param = {'table':table, 'pk_name':pk_name, 'pk_val_holder':'%(pk_val)s'}
+        sql = 'update %(table)s set {0} where %(pk_name)s=%(pk_val_holder)s' % static_param
+        sql = sql.format(place_holder)
         update_param = kwargs
         update_param['pk_val'] = pk
         return self.update(sql, **update_param)
 
+    def get_row(self, table, what, pk, pk_name='id'):
+        sql = ('select %(what)s from %(table)s where %(pk_name)s=%(pk_val_holder)s' %
+                {'what':what, 'table':table, 'pk_name':pk_name, 'pk_val_holder':'%s'})
+        return self.get(sql, pk)
 
 def get_mysql_client(host, port, user, passwd, database, max_conn_num=30, **kwargs):
     s = str(host) + str(port) + str(user) + str(passwd) + str(database) + str(kwargs)
