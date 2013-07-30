@@ -21,6 +21,11 @@ setup(
         platforms='Linux',
         license='MIT License',
         zip_safe=False,
+        dependency_links = [
+            "http://pypi.zhw.com:9000/packages/ketama-0.1.tar.gz",
+            "http://pypi.zhw.com:9000/packages/python-libmemcached-0.40.tar.gz",
+            "http://pypi.zhw.com:9000/packages/thrift_client-0.10.tar.gz",
+        ],
         install_requires=[
             'distribute',
             'MySQL-python',
@@ -28,7 +33,7 @@ setup(
             'Pyrex',
             'python-libmemcached',
             'redis',
-            'ketama',
+            #'ketama',
             'thrift_client',
         ],
         tests_require=[
