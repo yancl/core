@@ -22,18 +22,18 @@ setup(
         license='MIT License',
         zip_safe=False,
         dependency_links = [
-            "http://pypi.zhw.com:9000/packages/ketama-0.1.tar.gz",
-            "http://pypi.zhw.com:9000/packages/python-libmemcached-0.40.tar.gz",
+            #"https://github.com/douban/python-libmemcached/tarball/master#egg=python-libmemcached",
+            "http://pypi.zhw.com:9000/packages/python-libmemcached-1.0.tar.gz",
+            "http://pypi.zhw.com:9000/packages/python_ketama-0.1.tar.gz",
             "http://pypi.zhw.com:9000/packages/thrift_client-0.10.tar.gz",
         ],
         install_requires=[
             'distribute',
             'MySQL-python',
             'torndb',
-            'Pyrex',
             'python-libmemcached',
             'redis',
-            #'ketama',
+            'python_ketama',
             'thrift_client',
         ],
         tests_require=[
