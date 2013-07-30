@@ -26,6 +26,7 @@ setup(
             "http://pypi.zhw.com:9000/packages/python-libmemcached-1.0.tar.gz",
             "http://pypi.zhw.com:9000/packages/python_ketama-0.1.tar.gz",
             "http://pypi.zhw.com:9000/packages/thrift_client-0.10.tar.gz",
+            "http://pypi.zhw.com:9000/packages/torndb-0.10.tar.gz",
         ],
         install_requires=[
             'distribute',
