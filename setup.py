@@ -34,5 +34,5 @@ setup(
         tests_require=[
             'nose',
         ],
-        packages=['core', 'core.common', 'core.client', 'core.patch', 'core.test', 'core.utils']
+        packages=['zhwcore', 'zhwcore.common', 'zhwcore.client', 'zhwcore.patch', 'zhwcore.test', 'zhwcore.utils']
 )
