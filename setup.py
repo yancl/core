@@ -36,6 +36,7 @@ setup(
             'redis',
             'python_ketama',
             'thrift_client',
+            'kazoo',
         ],
         tests_require=[
             'nose',
