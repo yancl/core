@@ -1,6 +1,11 @@
 from __future__ import absolute_import
 
-from Queue import Queue, Full
+from Queue import (
+        Queue,
+        Full,
+        Empty
+)
+
 import threading
 import logging
 
@@ -61,16 +66,36 @@ class LoggerConsumer(object):
         self._consumer.setDaemon(True)
         self._consumer.start()
 
+    def _try_to_read_more(self, log_items ,num=100):
+        try:
+            for i in xrange(num):
+                (category, msg) = self._q.get_nowait()
+                log_items.append((category, msg))
+        except Empty:
+            pass
+        return log_items
+
     def _consume_worker(self):
+        log_items_buf = []
         while True:
             try:
+                #try to read more
+                log_items_buf = self._try_to_read_more(log_items_buf)
+                print log_items_buf
+                log_entries = [LogEntry(category=item[0], message=self._encode_msg_str(item[1])) for item in log_items_buf]
+                if log_entries:
+                    result = self._scribe.Log(messages=log_entries)
+                    if result != ResultCode.OK:
+                        print result
+
+                #clean buf
+                log_items_buf = []
+
+                #try to read
                 (category, msg) = self._q.get()
-                print 'category:',category, 'msg:',msg
-                log_entry = LogEntry(category=category, message=self._encode_msg_str(msg))
-                result = self._scribe.Log(messages=[log_entry])
-                if result != ResultCode.OK:
-                    print result
+                log_items_buf.append((category, msg))
             except Exception,e:
+                log_items_buf = []
                 print e
 
     def _encode_msg_str(self, msg):
