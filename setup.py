@@ -9,7 +9,7 @@ if sys.argv[-1] == 'publish':
 
 setup(
         name = "zhwcore",
-        version = "0.10",
+        version = "0.11",
         description="python corelib for zhaohaowan project",
         long_description=open("README.md").read(),
         author="yancl",
