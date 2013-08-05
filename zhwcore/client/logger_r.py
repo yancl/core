@@ -134,6 +134,10 @@ def get_pylogger_client(logger_name, level):
     return pylogger_clients[(logger_name, level)]
 
 
+def init():
+    logger_consumer.run()
+
+
 logger_clients = {}
 pylogger_clients = {}
 
@@ -144,5 +148,5 @@ if __name__ == '__main__':
     pyxxx = get_pylogger_client('pyxxx', logging.DEBUG)
     pyxxx.info('py log stream')
 
-    logger_consumer.run()
+    init()
     logger_consumer.join()
