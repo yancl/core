@@ -12,11 +12,20 @@ class T(object):
         MethodDecorator(self, t_wrapper).decorate()
 
     def add(self, a, b):
-        return a+b
+        return a + b
+
+
+class S(T):
+    def multi(self, a, b):
+        return a * b
+
 
 class TestCaseMethodDecorator(object):
     def __init__(self):
         pass
 
     def test_wrapper(self):
-        assert T().add(1,2) == 4
+        assert T().add(1, 2) == 4
+
+    def test_derived_wrapper(self):
+        assert S().multi(1, 2) == 3
