@@ -36,7 +36,12 @@ class ServiceAddrResovler(object):
 
         """
         self._zk = ZookeeperClient(zk_addr)
+        if service_addr[-1] != '/':
+            raise Exception('service_addr must be end with "/", now:[%s]' % service_addr)
         self._service_addr = service_addr
+
+        #init connection to zookeeper
+        self._zk.start()
 
     def get_hosts(self):
         """
