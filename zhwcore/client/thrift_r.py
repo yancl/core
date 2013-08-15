@@ -3,14 +3,33 @@ from __future__ import absolute_import
 from thrift_client import ThriftClient
 from thrift.protocol import TBinaryProtocol
 from zhwcore.common.rpc_proxy import TracedRPCProxy
+from zhwcore.client.zk_r import ServiceAddrResovler
 
 thrift_clients = {}
 
-def get_thrift_client(cls, hosts, excpt_classes=(), max_conn_num=30, retries=2, timeout=3, connect_timeout=0.5):
-    '''
+def get_thrift_client(cls, zk_addr, service_addr, excpt_classes=(),
+                      max_conn_num=30, retries=2, timeout=3,
+                      connect_timeout=0.5):
+    """
+    get thrift client from zookeeper address
+
+    """
+    hosts = ServiceAddrResovler(zk_addr=zk_addr, service_addr=service_addr).get_hosts()
+    return get_thrift_client_on_hosts(cls=cls, hosts=hosts,
+        excpt_classes=excpt_classes, max_conn_num=max_conn_num,
+        retries=retries, timeout=timeout, connect_timeout=connect_timeout
+    )
+
+
+def get_thrift_client_on_hosts(cls, hosts, excpt_classes=(),
+                               max_conn_num=30, retries=2,
+                               timeout=3, connect_timeout=0.5):
+
+    """
         there should be only one thrift client for each service in one process
         so we make it like a factory
-    '''
+    """
+
     hosts_t = hosts
     hosts_t.sort()
     key = str(cls) + str(hosts_t) + str(excpt_classes)
