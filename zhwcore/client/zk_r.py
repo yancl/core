@@ -93,6 +93,9 @@ class ServiceAddrResovler(object):
         #init connection to zookeeper
         self._zk.start()
 
+        #watch children changed automatic
+        self._watch_children()
+
     def get_hosts(self):
         """
         get hosts of the service address contains
@@ -102,15 +105,7 @@ class ServiceAddrResovler(object):
         hosts = self._get_nodes_value(nodes)
         return hosts
 
-    def watch_children(self):
-        """
-        watch the children changed event
-        and call the callback
-
-        """
-        self._zk.ChildrenWatch(self._service_addr, self._children_changed)
-
-    def _get_children(self):
+   def _get_children(self):
         """
         get children of the service address
 
@@ -139,6 +134,14 @@ class ServiceAddrResovler(object):
             return self._zk.get(path)[0]
         except NoNodeError:
             return None
+
+    def _watch_children(self):
+        """
+        watch the children changed event
+        and call the callback
+
+        """
+        self._zk.ChildrenWatch(self._service_addr, self._children_changed)
 
     def _children_changed(self, children):
         """
