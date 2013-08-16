@@ -103,7 +103,7 @@ class ServiceAddrResovler(object):
         """
         nodes = self._get_children()
         hosts = self._get_nodes_value(nodes)
-        return hosts
+        return list(set(hosts))
 
     def _get_children(self):
         """
