@@ -2,12 +2,54 @@ from kazoo.client import KazooClient
 from kazoo.exceptions import NoNodeError
 from threading import Lock
 
+from common.singleton import Singleton
+
 
 class ZookeeperClient(KazooClient):
-    _lock = Lock()
+    """
+    zookeeper client that communicates with
+    zookeeper cluster
+
+    one instance is enough for one process
+    so make it singleton here.
+
+    """
+    __metaclass__ = Singleton
+
+    def __init__(self, *argv, **kwargs):
+        super(ZookeeperClient, self).__init__(*argv, **kwargs)
+        self._lock = Lock()
+        self._started = False
+
+    def start(self):
+        """
+        only start once
+
+        """
+        with self._lock:
+            if self._started == True:
+                return
+            super(ZookeeperClient, self).start()
+            self._started = True
+
+    def stop(self):
+        """
+        only stop once
+
+        """
+        with self._lock:
+            if self._started == False:
+                return
+            super(ZookeeperClient, self).stop()
+            self._started = False
+
     def __getattr__(self, key):
+        """
+        make sure sequence call through lock
+
+        """
         def _(*args, **kwargs):
-            with _lock:
+            with self._lock:
                 func = getattr(self, key)
                 return func(*args, **kwargs)
         return _
@@ -27,7 +69,7 @@ class ServiceAddrResovler(object):
         so that caller will connect them for later process
 
     """
-    def __init__(self, zk_addr, service_addr):
+    def __init__(self, zk_addr, service_addr, callback=None):
         """
         zk_address is zookeeper cluster hosts
         service_addr is service address
@@ -42,6 +84,7 @@ class ServiceAddrResovler(object):
 
         #init connection to zookeeper
         self._zk.start()
+        self._watch_children()
 
     def get_hosts(self):
         """
@@ -73,3 +116,19 @@ class ServiceAddrResovler(object):
             return self._zk.get(path)[0]
         except NoNodeError:
             return None
+
+    def _watch_children(self):
+        """
+        watch the children changed event
+        and call the callback
+
+        """
+        self._zk.ChildrenWatch(self._service_addr, self._children_changed)
+
+
+    def _children_changed(children):
+        """
+        called when children changed
+
+        """
+        print "Children are now: %s" % children
