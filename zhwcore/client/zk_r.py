@@ -105,7 +105,7 @@ class ServiceAddrResovler(object):
         hosts = self._get_nodes_value(nodes)
         return hosts
 
-   def _get_children(self):
+    def _get_children(self):
         """
         get children of the service address
 
