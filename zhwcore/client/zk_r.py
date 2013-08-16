@@ -150,4 +150,4 @@ class ServiceAddrResovler(object):
         """
         hosts = self._get_nodes_value(children)
         if self._callback:
-            self._callback(hosts)
+            self._callback(list(set(hosts)))
