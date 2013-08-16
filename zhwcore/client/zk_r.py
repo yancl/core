@@ -69,18 +69,12 @@ class ServiceAddrResovler(object):
         so that caller will connect them for later process
 
     """
-    def __init__(self, zk_addr, service_addr, callback=None):
+    def __init__(self, zk_addr, service_addr):
         """
         @zk_addr: is zookeeper cluster hosts
         @service_addr: is service address
             for example:
             /zhw/services/user/
-
-        @callback: called when the children changed
-        callback of the following form:
-
-        def callback(hosts):
-            pass
 
         """
         self._zk = ZookeeperClient(zk_addr)
@@ -88,13 +82,10 @@ class ServiceAddrResovler(object):
             raise Exception('service_addr must be end with "/", now:[%s]' % service_addr)
         self._service_addr = service_addr
 
-        self._callback = callback
+        self._callback = None
 
         #init connection to zookeeper
         self._zk.start()
-
-        #watch children changed automatic
-        self._watch_children()
 
     def get_hosts(self):
         """
@@ -104,6 +95,21 @@ class ServiceAddrResovler(object):
         nodes = self._get_children()
         hosts = self._get_nodes_value(nodes)
         return list(set(hosts))
+
+    def watch_children(self, callback):
+        """
+        watch the children changed event
+        and call the callback
+
+        @callback: called when the children changed
+        callback of the following form:
+
+        def callback(hosts):
+            pass
+
+        """
+        self._callback = callback
+        self._zk.ChildrenWatch(self._service_addr, self._children_changed)
 
     def _get_children(self):
         """
@@ -134,14 +140,6 @@ class ServiceAddrResovler(object):
             return self._zk.get(path)[0]
         except NoNodeError:
             return None
-
-    def _watch_children(self):
-        """
-        watch the children changed event
-        and call the callback
-
-        """
-        self._zk.ChildrenWatch(self._service_addr, self._children_changed)
 
     def _children_changed(self, children):
         """
