@@ -2,7 +2,7 @@ from kazoo.client import KazooClient
 from kazoo.exceptions import NoNodeError
 from threading import Lock
 
-from common.singleton import Singleton
+from zhwcore.common.singleton import Singleton
 
 
 class ZookeeperClient(KazooClient):
