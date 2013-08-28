@@ -1,7 +1,7 @@
 from __future__ import absolute_import
 
 from zhwcore.client.mysql_r import get_mysql_client
-from zhwcore.client.dbwrapper import DBWrapper
+from zhwcore.client.db_wrapper import DBWrapper
 
 class TestCaseDBWrapper(object):
     def __init__(self):
