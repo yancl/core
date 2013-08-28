@@ -217,8 +217,31 @@ class DBWrapper:
         
         if _test: return sql_query
         
-        return self._db_execute(sql_query)
+        return self._db_query(sql_query)
+
+    def execute(self, sql_query, vars=None, processed=False, _test=False): 
+        """
+        Execute SQL query `sql_query` using dictionary `vars` to interpolate it.
+        If `processed=True`, `vars` is a `reparam`-style list to use 
+        instead of interpolating.
         
+            >>> db = DBWrapper(None)
+            >>> db.execute("SELECT * FROM foo", _test=True)
+            <sql: 'SELECT * FROM foo'>
+            >>> db.execute("SELECT * FROM foo WHERE x = $x", vars=dict(x='f'), _test=True)
+            <sql: "SELECT * FROM foo WHERE x = 'f'">
+            >>> db.execute("SELECT * FROM foo WHERE x = " + sqlquote('f'), _test=True)
+            <sql: "SELECT * FROM foo WHERE x = 'f'">
+        """
+        if vars is None: vars = {}
+        
+        if not processed and not isinstance(sql_query, SQLQuery):
+            sql_query = reparam(sql_query, vars)
+        
+        if _test: return sql_query
+        
+        return self._db_execute(sql_query)
+ 
     def _db_insert(self, sql_query): 
         """executes an sql query"""
         query, params = self._process_query(sql_query)
@@ -229,7 +252,7 @@ class DBWrapper:
         query, params = self._process_query(sql_query)
         return self._db.update(query, *params)
 
-    def _db_execute(self, sql_query): 
+    def _db_query(self, sql_query): 
         """executes an sql query"""
         query, params = self._process_query(sql_query)
         return self._db.query(query, *params)
@@ -238,6 +261,11 @@ class DBWrapper:
         """executes an sql query"""
         query, params = self._process_query(sql_query)
         return self._db.execute_rowcount(query, *params)
+
+    def _db_execute(self, sql_query):
+        """executes an sql query"""
+        query, params = self._process_query(sql_query)
+        return self._db.execute(query, *params)
 
     def _param_marker(self):
         """Returns parameter marker based on paramstyle attribute if this database."""
